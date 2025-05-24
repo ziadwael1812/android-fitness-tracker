@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fitness Tracker</string>
+
+    <!-- Common UI Labels -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="settings">Settings</string>
+    <string name="profile">Profile</string>
+    <string name="confirm">Confirm</string>
+    <string name="submit">Submit</string>
+    <string name="search">Search</string>
+    <string name="loading">Loading…</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="steps">Steps</string>
+    <string name="distance">Distance</string>
+    <string name="calories">Calories</string>
+    <string name="duration">Duration</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="bpm">bpm</string> <!-- beats per minute -->
+    <string name="km">km</string>
+    <string name="miles">mi</string>
+    <string name="kcal">kcal</string>
+
+    <!-- Navigation Titles / Screen Headers -->
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_log_activity">Log Activity</string>
+    <string name="title_activity_history">Activity History</string>
+    <string name="title_goals">Goals</string>
+    <string name="title_set_goals">Set Goals</string>
+    <string name="title_statistics">Statistics</string>
+    <string name="title_activity_detail">Activity Detail</string>
+
+    <!-- Dashboard Screen -->
+    <string name="today_summary">Today's Summary</string>
+    <string name="view_all_history">View All History</string>
+    <string name="start_new_activity">Start New Activity</string>
+    <string name="current_goal_steps">Goal: %1$d steps</string>
+
+    <!-- Log Activity Screen -->
+    <string name="label_activity_type">Activity Type</string>
+    <string name="hint_activity_type">e.g., Running, Walking, Cycling</string>
+    <string name="label_start_time">Start Time</string>
+    <string name="label_end_time">End Time</string>
+    <string name="label_notes">Notes (Optional)</string>
+    <string name="hint_notes">e.g., Felt great, rainy weather</string>
+    <string name="manual_entry">Manual Entry</string>
+    <string name="live_tracking">Live Tracking</string>
+    <string name="start_tracking">Start Tracking</string>
+    <string name="stop_tracking">Stop Tracking</string>
+    <string name="pause_tracking">Pause</string>
+    <string name="resume_tracking">Resume</string>
+    <string name="discard_activity_prompt">Discard this activity?</string>
+
+    <!-- Goals Screen -->
+    <string name="daily_step_goal">Daily Step Goal</string>
+    <string name="weekly_distance_goal">Weekly Distance Goal</string>
+    <string name="active_minutes_goal">Daily Active Minutes Goal</string>
+    <string name="current_steps">Current: %1$d</string>
+    <string name="goal_steps">Goal: %1$d</string>
+    <string name="edit_goal">Edit Goal</string>
+
+    <!-- Settings Screen -->
+    <string name="pref_title_units">Units</string>
+    <string name="pref_summary_units">Choose between Metric (km, kg) or Imperial (miles, lbs)</string>
+    <string name="pref_title_theme">Theme</string>
+    <string name="pref_summary_theme">Select Light, Dark, or System Default</string>
+    <string name="pref_title_notifications">Notifications</string>
+    <string name="pref_summary_notifications">Manage app notifications</string>
+    <string name="pref_title_google_fit_sync">Google Fit Sync</string>
+    <string name="pref_summary_google_fit_sync_on">Syncing with Google Fit</string>
+    <string name="pref_summary_google_fit_sync_off">Not syncing with Google Fit. Tap to connect.</string>
+    <string name="pref_title_data_backup">Data Backup &amp; Restore</string>
+    <string name="pref_title_about">About</string>
+
+    <!-- Profile Screen -->
+    <string name="label_name">Name</string>
+    <string name="label_age">Age</string>
+    <string name="label_weight">Weight</string>
+    <string name="label_height">Height</string>
+    <string name="label_gender">Gender</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Other</string>
+    <string name="gender_prefer_not_to_say">Prefer not to say</string>
+
+    <!-- Permissions -->
+    <string name="permission_required">Permission Required</string>
+    <string name="location_permission_rationale">Location permission is needed for tracking your activities accurately. Please grant the permission.</string>
+    <string name="activity_recognition_permission_rationale">Activity Recognition permission is needed to count steps and detect activities automatically. Please grant the permission.</string>
+    <string name="background_location_permission_rationale">Background location access is required to continue tracking your activity when the app is in the background. Please enable 'Allow all the time' in settings.</string>
+    <string name="open_settings">Open Settings</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_name">Tracking Service</string>
+    <string name="notification_channel_description">Notifications for ongoing activity tracking.</string>
+    <string name="tracking_notification_title">Tracking Activity</string>
+    <string name="tracking_notification_text">Steps: %1$d | Distance: %2$.2f km</string>
+    <string name="goal_reached_notification_title">Goal Achieved!</string>
+    <string name="goal_reached_notification_text">You've reached your daily step goal!</string>
+
+    <!-- Errors & Messages -->
+    <string name="error_saving_activity">Error saving activity. Please try again.</string>
+    <string name="error_loading_data">Error loading data. Please check your connection.</string>
+    <string name="error_no_gps">GPS signal lost. Tracking may be inaccurate.</string>
+    <string name="google_fit_connect_failed">Failed to connect to Google Fit.</string>
+    <string name="google_fit_permissions_not_granted">Google Fit permissions not granted.</string>
+    <string name="activity_saved_successfully">Activity saved successfully.</string>
+
+    <!-- Date/Time formatting -->
+    <string name="date_format_short">MMM dd, yyyy</string> <!-- e.g., Jan 23, 2024 -->
+    <string name="time_format_simple">HH:mm</string> <!-- e.g., 14:30 -->
+
+    <!-- Content Descriptions for Accessibility -->
+    <string name="cd_add_activity">Add new activity</string>
+    <string name="cd_navigate_back">Navigate back</string>
+    <string name="cd_activity_icon">Activity type icon</string>
+
+</resources>

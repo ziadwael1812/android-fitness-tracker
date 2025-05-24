@@ -1,0 +1,39 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        kotlin_version = '1.9.22' // Check for the latest stable version
+        compose_version = '1.6.7' // Check for the latest stable version of Compose BOM
+        compose_compiler_version = '1.5.8' // Aligns with Kotlin 1.9.22
+        hilt_version = '2.51.1'    // Check for the latest stable version
+        room_version = '2.6.1'      // Check for the latest stable version
+        coroutines_version = '1.7.3' // Check for the latest stable version
+        lifecycle_version = '2.7.0' // Check for the latest stable version
+        nav_version = '2.7.7'       // Check for the latest stable version
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.3.1" // Check for the latest stable version
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.buildDir
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // You can add other repositories like JitPack here if needed
+        // maven { url 'https://jitpack.io' }
+    }
+}

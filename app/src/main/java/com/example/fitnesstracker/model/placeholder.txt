@@ -1,0 +1,1 @@
+This package can be used for domain models that are not Room Entities but are used across the application, or for specific UI state models if not co-located with ViewModels.

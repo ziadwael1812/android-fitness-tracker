@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   Learn more about data extraction rules at:
+   https://developer.android.com/guide/topics/data/data-extraction-rules
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <!-- TODO: Define what to include and exclude from cloud backup -->
+        <!-- Include all shared preferences by default -->
+        <include domain="sharedpref" path="."/>
+
+        <!-- Exclude specific shared preferences -->
+        <!-- <exclude domain="sharedpref" path="device_tokens.xml"/> -->
+
+        <!-- Include all files in the 'files' directory by default -->
+        <include domain="file" path="."/>
+
+        <!-- Exclude specific files -->
+        <!-- <exclude domain="file" path="temporary_user_data.txt"/> -->
+
+        <!-- Include all databases by default -->
+        <include domain="database" path="."/>
+
+        <!-- Exclude specific databases or tables if necessary -->
+        <!-- <exclude domain="database" path="sensitive_logs.db"/> -->
+
+        <!-- To back up your Room database, ensure its path is included. -->
+        <!-- The default path for a Room database is usually: -->
+        <!-- <include domain="database" path="YourDatabaseName.db" /> -->
+        <!-- Also include the -shm and -wal files for proper backup -->
+        <!-- <include domain="database" path="YourDatabaseName.db-shm" /> -->
+        <!-- <include domain="database" path="YourDatabaseName.db-wal" /> -->
+
+    </cloud-backup>
+    <device-transfer>
+        <!-- Rules for device-to-device transfer. Similar syntax to cloud-backup -->
+        <!-- Typically, you'd want to transfer most user data. -->
+        <include domain="sharedpref" path="."/>
+        <include domain="file" path="."/>
+        <include domain="database" path="."/>
+    </device-transfer>
+</data-extraction-rules>

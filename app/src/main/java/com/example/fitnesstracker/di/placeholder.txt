@@ -1,0 +1,1 @@
+This package will contain Hilt modules for providing dependencies like Database, Dao, Repository, etc.

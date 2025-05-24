@@ -1,0 +1,1 @@
+This package will contain Room database components: Entities (e.g., ActivityLog, UserGoal), DAOs (Data Access Objects), and the Database class itself.

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme (Light) -->
+    <style name="Theme.FitnessTracker" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/primary_light</item>
+        <item name="android:colorPrimaryDark">@color/primary_container_light</item> <!-- Or a darker shade of primary_light -->
+        <item name="android:colorAccent">@color/secondary_light</item>
+
+        <!-- Material Component attributes -->
+        <item name="colorPrimary">@color/primary_light</item>
+        <item name="colorOnPrimary">@color/on_primary_light</item>
+        <item name="colorPrimaryContainer">@color/primary_container_light</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container_light</item>
+        <item name="colorSecondary">@color/secondary_light</item>
+        <item name="colorOnSecondary">@color/on_secondary_light</item>
+        <item name="colorSecondaryContainer">@color/secondary_container_light</item>
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container_light</item>
+        <item name="colorTertiary">@color/tertiary_light</item>
+        <item name="colorOnTertiary">@color/on_tertiary_light</item>
+        <item name="colorTertiaryContainer">@color/tertiary_container_light</item>
+        <item name="colorOnTertiaryContainer">@color/on_tertiary_container_light</item>
+        <item name="colorError">@color/error_light</item>
+        <item name="colorOnError">@color/on_error_light</item>
+        <item name="colorErrorContainer">@color/error_container_light</item>
+        <item name="colorOnErrorContainer">@color/on_error_container_light</item>
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="colorOnBackground">@color/on_background_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/on_surface_light</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_light</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant_light</item>
+        <item name="colorOutline">@color/outline_light</item>
+        <item name="colorSurfaceInverse">@color/inverse_surface_light</item>
+        <item name="colorOnSurfaceInverse">@color/inverse_on_surface_light</item>
+        <item name="colorPrimaryInverse">@color/inverse_primary_light</item>
+        <item name="android:statusBarColor">@color/primary_container_light</item> <!-- Or primary_light -->
+        <item name="android:windowLightStatusBar">true</item> <!-- For light status bar icons -->
+
+        <!-- For Jetpack Compose Theme Adapter -->
+        <item name="isMaterial3Theme">true</item>
+    </style>
+
+    <!-- You can also create a values-night/themes.xml for a specific dark theme -->
+    <!-- Or rely on Compose to handle dark theme switching if using Material3 in Compose -->
+
+</resources>

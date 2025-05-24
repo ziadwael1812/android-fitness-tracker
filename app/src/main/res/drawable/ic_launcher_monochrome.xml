@@ -1,0 +1,18 @@
+<!-- For Android 13+ themed icons. This should be a single color version of your foreground. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="@android:color/white" 
+        android:pathData="M36,54 L72,54 M54,36 L54,72" 
+        android:strokeWidth="4"
+        android:strokeColor="@android:color/white"/>
+    <!-- Placeholder: A simple cross shape. Should match the monochrome version of ic_launcher_foreground -->
+    <!-- Example fitness icon (monochrome):
+    <path
+        android:fillColor="@android:color/white"
+        android:pathData="M54,20 L62,20 L62,30 L72,30 L72,38 L62,38 L62,72 L54,72 L54,52 L46,52 L46,42 L54,42 Z"/>
+    -->
+</vector>

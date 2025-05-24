@@ -1,0 +1,1 @@
+This package will contain classes related to remote data sources, primarily the Google Fit API client and any other network API clients (e.g., using Retrofit).

@@ -1,0 +1,1 @@
+This package will contain the Repository implementation (e.g., FitnessRepository) which abstracts data sources (local and remote) from the ViewModels.

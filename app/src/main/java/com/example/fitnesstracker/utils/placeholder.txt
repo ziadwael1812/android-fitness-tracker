@@ -1,0 +1,1 @@
+This package will contain utility/helper classes and functions (e.g., PermissionUtils.kt for handling runtime permissions, Formatters.kt for data display, Constants.kt).

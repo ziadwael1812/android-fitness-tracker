@@ -1,0 +1,78 @@
+# Android Studio
+
+# Built application files
+*.apk
+*.aab
+*.ap_
+*.a_
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+build/
+
+# Gradle files
+.gradle/
+local.properties
+
+# Local configuration files (e.g. signing keys, API keys - keep them out of version control!)
+*.jks
+*.keystore
+secrets.properties
+keystore.properties
+
+# Android Studio Navigation editor files
+nav_graph_versions.xml
+
+# Android Studio captures folder
+captures/
+
+# Logs
+*.log
+
+# IntelliJ IDEA project files (if you prefer not to share these)
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea/workspace.xml
+.idea/libraries
+
+# External native build folder generated in Android Studio 2.2 and later
+.externalNativeBuild/
+
+# Profiler ATrace snapshots
+*.trace
+
+# Kotlin
+*.jar
+*.kt.js
+*.kt.meta
+
+#KSP (Kotlin Symbol Processing)
+build/generated/ksp/
+
+# Lint
+lint/
+
+# Google services (keep client_secret.json out if it contains sensitive info)
+# google-services.json # Typically this IS versioned, but be careful if it has secrets added manually.
+
+# MacOS
+.DS_Store
+
+# Flutter (if you ever mix with Flutter)
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# VS Code
+.vscode/

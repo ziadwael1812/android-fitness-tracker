@@ -1,0 +1,1 @@
+This package will contain individual Composable screen functions (e.g., DashboardScreen.kt, LogWorkoutScreen.kt, SettingsScreen.kt, ProfileScreen.kt, ActivityDetailScreen.kt).

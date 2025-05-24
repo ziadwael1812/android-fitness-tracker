@@ -1,0 +1,1 @@
+This package will contain ViewModel classes (e.g., DashboardViewModel, LogWorkoutViewModel) that provide data to the Composable screens and handle user interactions.

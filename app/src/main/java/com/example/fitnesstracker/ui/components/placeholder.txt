@@ -1,0 +1,1 @@
+This package will contain reusable Composable UI elements (e.g., ActivityCard.kt, StatDisplay.kt, CustomButton.kt) used across different screens.

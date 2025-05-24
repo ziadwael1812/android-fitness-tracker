@@ -1,0 +1,1 @@
+This package will contain Android Services, such as a Foreground Service (TrackingService.kt) for continuous activity tracking (steps, distance, location).

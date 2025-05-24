@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base colors for Material 3 Theme (Light) -->
+    <color name="primary_light">#00658F</color>
+    <color name="on_primary_light">#FFFFFF</color>
+    <color name="primary_container_light">#C7E7FF</color>
+    <color name="on_primary_container_light">#001E2E</color>
+    <color name="secondary_light">#50616E</color>
+    <color name="on_secondary_light">#FFFFFF</color>
+    <color name="secondary_container_light">#D3E5F5</color>
+    <color name="on_secondary_container_light">#0C1E29</color>
+    <color name="tertiary_light">#65597B</color>
+    <color name="on_tertiary_light">#FFFFFF</color>
+    <color name="tertiary_container_light">#EADDFF</color>
+    <color name="on_tertiary_container_light">#201634</color>
+    <color name="error_light">#BA1A1A</color>
+    <color name="on_error_light">#FFFFFF</color>
+    <color name="error_container_light">#FFDAD6</color>
+    <color name="on_error_container_light">#410002</color>
+    <color name="background_light">#FCFCFF</color>
+    <color name="on_background_light">#1A1C1E</color>
+    <color name="surface_light">#FCFCFF</color>
+    <color name="on_surface_light">#1A1C1E</color>
+    <color name="surface_variant_light">#DDE3EA</color>
+    <color name="on_surface_variant_light">#41484D</color>
+    <color name="outline_light">#71787E</color>
+    <color name="inverse_surface_light">#2E3133</color>
+    <color name="inverse_on_surface_light">#F0F1F3</color>
+    <color name="inverse_primary_light">#8ACEFF</color>
+    <color name="surface_tint_light">#00658F</color>
+    <color name="scrim_light">#000000</color>
+
+    <!-- Base colors for Material 3 Theme (Dark) -->
+    <color name="primary_dark">#8ACEFF</color>
+    <color name="on_primary_dark">#00344C</color>
+    <color name="primary_container_dark">#004C6D</color>
+    <color name="on_primary_container_dark">#C7E7FF</color>
+    <color name="secondary_dark">#B7C9D8</color>
+    <color name="on_secondary_dark">#22333E</color>
+    <color name="secondary_container_dark">#384955</color>
+    <color name="on_secondary_container_dark">#D3E5F5</color>
+    <color name="tertiary_dark">#CFC0E7</color>
+    <color name="on_tertiary_dark">#362B4A</color>
+    <color name="tertiary_container_dark">#4D4262</color>
+    <color name="on_tertiary_container_dark">#EADDFF</color>
+    <color name="error_dark">#FFB4AB</color>
+    <color name="on_error_dark">#690005</color>
+    <color name="error_container_dark">#93000A</color>
+    <color name="on_error_container_dark">#FFDAD6</color>
+    <color name="background_dark">#1A1C1E</color>
+    <color name="on_background_dark">#E2E2E5</color>
+    <color name="surface_dark">#1A1C1E</color>
+    <color name="on_surface_dark">#E2E2E5</color>
+    <color name="surface_variant_dark">#41484D</color>
+    <color name="on_surface_variant_dark">#C1C7CE</color>
+    <color name="outline_dark">#8B9298</color>
+    <color name="inverse_surface_dark">#E2E2E5</color>
+    <color name="inverse_on_surface_dark">#1A1C1E</color>
+    <color name="inverse_primary_dark">#00658F</color>
+    <color name="surface_tint_dark">#8ACEFF</color>
+    <color name="scrim_dark">#000000</color>
+
+    <!-- Custom App Specific Colors -->
+    <color name="step_count_color">#FF9800</color> <!-- Example: Orange for step count -->
+    <color name="distance_color">#4CAF50</color> <!-- Example: Green for distance -->
+    <color name="calories_color">#F44336</color> <!-- Example: Red for calories -->
+    <color name="active_time_color">#2196F3</color> <!-- Example: Blue for active time -->
+</resources>

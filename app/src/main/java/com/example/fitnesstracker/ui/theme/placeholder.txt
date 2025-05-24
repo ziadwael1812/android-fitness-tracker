@@ -1,0 +1,1 @@
+This package will contain Jetpack Compose Theme files: Color.kt, Shape.kt, Theme.kt, and Typography.kt.

@@ -5,14 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.fitnesstracker.ui.screens.activity.ActivityTrackingScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.dashboard.DashboardScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.goals.GoalsScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.history.HistoryScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.profile.ProfileScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.settings.SettingsScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.sleep.SleepLogScreen // Placeholder
-import com.example.fitnesstracker.ui.screens.weight.WeightLogScreen // Placeholder
+import com.example.fitnesstracker.ui.screens.activity.ActivityTrackingScreen
+import com.example.fitnesstracker.ui.screens.dashboard.DashboardScreen
+import com.example.fitnesstracker.ui.screens.goals.GoalsScreen
+import com.example.fitnesstracker.ui.screens.history.HistoryScreen
+import com.example.fitnesstracker.ui.screens.profile.ProfileScreen
+import com.example.fitnesstracker.ui.screens.settings.SettingsScreen
+import com.example.fitnesstracker.ui.screens.sleep.SleepLogScreen
+import com.example.fitnesstracker.ui.screens.weight.WeightLogScreen
 
 // Sealed class for defining navigation routes
 sealed class Screen(val route: String) {
@@ -63,11 +63,4 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 }
 
 // Placeholder Composable functions for screens (to be implemented in their respective packages)
-@Composable fun ActivityTrackingScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun DashboardScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun GoalsScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun HistoryScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun ProfileScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun SettingsScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun SleepLogScreen(navController: NavHostController) { /* TODO */ }
-@Composable fun WeightLogScreen(navController: NavHostController) { /* TODO */ }
+// These are now defined in their own files, so they are removed from here.

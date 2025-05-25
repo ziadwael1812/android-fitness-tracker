@@ -4,11 +4,10 @@ This project is an Android Fitness Tracker application designed to help users mo
 
 ## 📸 App Preview (Screenshots)
 
-*(Ideally, add 2-4 screenshots of your app here. You'll need to upload them to your repository, perhaps in a `screenshots/` folder, and then link them using markdown: `![Screenshot Alt Text](screenshots/your-image-name.png)`)*
 
-*   ![Dashboard Preview](screenshots/dashboard.png) <!-- Example, replace with your actual image -->
-*   ![Workout Log Preview](screenshots/workout_log.png) <!-- Example, replace with your actual image -->
-*   ![GPS Tracking Preview](screenshots/gps_tracking.png) <!-- Example, replace with your actual image -->
+*   ![Dashboard Preview](screenshots/dashboard.png) 
+*   ![Workout Log Preview](screenshots/workout_log.png) 
+*   ![GPS Tracking Preview](screenshots/gps_tracking.png) 
 
 ## ✨ Features
 

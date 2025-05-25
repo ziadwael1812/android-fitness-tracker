@@ -1,62 +1,60 @@
 package com.example.fitnesstracker.di
 
 import android.content.Context
-import androidx.room.Room
 import com.example.fitnesstracker.data.local.FitnessDatabase
-import com.example.fitnesstracker.data.local.dao.* // Import all DAOs
+import com.example.fitnesstracker.data.local.ActivityRecordDao
+import com.example.fitnesstracker.data.local.UserGoalDao
+import com.example.fitnesstracker.data.repository.FitnessRepository
+import com.example.fitnesstracker.data.repository.FitnessRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
     @Singleton
-    fun provideFitnessDatabase(
-        @ApplicationContext app: Context
-    ) = Room.databaseBuilder(
-        app,
-        FitnessDatabase::class.java,
-        FitnessDatabase.DATABASE_NAME
-    )
-    // .fallbackToDestructiveMigration() // Consider a proper migration strategy for production
-    .build()
-
     @Provides
-    @Singleton
-    fun provideActivityRecordDao(db: FitnessDatabase): ActivityRecordDao {
-        return db.activityRecordDao()
+    fun provideFitnessDatabase(@ApplicationContext context: Context): FitnessDatabase {
+        return FitnessDatabase.getDatabase(context)
     }
 
-    @Provides
     @Singleton
-    fun provideDailyGoalDao(db: FitnessDatabase): DailyGoalDao {
-        return db.dailyGoalDao()
+    @Provides
+    fun provideActivityRecordDao(database: FitnessDatabase): ActivityRecordDao {
+        return database.activityRecordDao()
     }
 
-    @Provides
     @Singleton
-    fun provideUserProfileDao(db: FitnessDatabase): UserProfileDao {
-        return db.userProfileDao()
+    @Provides
+    fun provideUserGoalDao(database: FitnessDatabase): UserGoalDao {
+        return database.userGoalDao()
     }
 
-    @Provides
     @Singleton
-    fun provideDailySleepRecordDao(db: FitnessDatabase): DailySleepRecordDao {
-        return db.dailySleepRecordDao()
+    @Provides
+    fun provideFitnessRepository(
+        activityRecordDao: ActivityRecordDao,
+        userGoalDao: UserGoalDao,
+        // Add GoogleFitClient or other remote data sources here when implemented
+        ioDispatcher: CoroutineDispatcher // To run DB operations off the main thread
+    ): FitnessRepository {
+        // Implementation class will be created next
+        return FitnessRepositoryImpl(activityRecordDao, userGoalDao, ioDispatcher)
     }
 
-    @Provides
     @Singleton
-    fun provideWeightRecordDao(db: FitnessDatabase): WeightRecordDao {
-        return db.weightRecordDao()
-    }
+    @Provides
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
-    // You can add other singleton providers here, e.g., for SharedPreferences, OkHttpClient, Retrofit instances
-
+    // Add other application-level dependencies here, e.g.:
+    // - GoogleFitClient (for interacting with Google Fit API)
+    // - SharedPreferences
+    // - NotificationManager
 }

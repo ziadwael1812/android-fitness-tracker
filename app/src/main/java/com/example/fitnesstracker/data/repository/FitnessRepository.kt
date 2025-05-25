@@ -11,7 +11,8 @@ interface FitnessRepository {
     suspend fun updateActivityRecord(record: ActivityRecord)
     suspend fun deleteActivityRecord(record: ActivityRecord)
     fun getActivityRecordById(id: Long): Flow<ActivityRecord?>
-    fun getAllActivityRecords(): Flow<List<ActivityRecord>>
+    fun getAllActivityRecords(): Flow<List<ActivityRecord>> // Typically unsorted or default sort
+    fun getAllActivityRecordsSortedByDate(): Flow<List<ActivityRecord>> // New: explicitly sorted
     fun getActivityRecordsBetweenDates(startDate: Date, endDate: Date): Flow<List<ActivityRecord>>
     fun getActivityRecordsByType(activityType: String): Flow<List<ActivityRecord>>
     suspend fun deleteAllActivityRecords()

@@ -2,7 +2,15 @@
 
 This project is an Android Fitness Tracker application designed to help users monitor their physical activity, set fitness goals, and track their progress.
 
-## Features
+## 📸 App Preview (Screenshots)
+
+*(Ideally, add 2-4 screenshots of your app here. You'll need to upload them to your repository, perhaps in a `screenshots/` folder, and then link them using markdown: `![Screenshot Alt Text](screenshots/your-image-name.png)`)*
+
+*   ![Dashboard Preview](screenshots/dashboard.png) <!-- Example, replace with your actual image -->
+*   ![Workout Log Preview](screenshots/workout_log.png) <!-- Example, replace with your actual image -->
+*   ![GPS Tracking Preview](screenshots/gps_tracking.png) <!-- Example, replace with your actual image -->
+
+## ✨ Features
 
 - **Activity Tracking:** Step counting, distance measurement, calorie burn estimation.
 - **Workout Logging:** Manual entry for various workout types (running, cycling, gym, etc.).
@@ -10,24 +18,24 @@ This project is an Android Fitness Tracker application designed to help users mo
 - **Goal Setting:** Users can set daily or weekly goals for steps, distance, or active minutes.
 - **Progress Monitoring:** Visual charts and statistics to show progress over time.
 - **User Profile:** Basic user profile to store personal information (height, weight, age) for more accurate calculations.
-- **Google Fit Integration:** (Optional, if feasible) Sync data with Google Fit for a holistic view of health data.
+- **Google Fit Integration:** Syncs data with Google Fit for a holistic view of health data.
 - **Data Persistence:** Store user data locally using Room database.
 - **Modern UI:** Clean and intuitive user interface built with Jetpack Compose.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Language:** Kotlin
 - **UI:** Jetpack Compose
 - **Architecture:** MVVM (Model-View-ViewModel)
 - **Asynchronous Programming:** Kotlin Coroutines & Flow
 - **Database:** Room Persistence Library
-- **Dependency Injection:** Hilt (or Koin)
+- **Dependency Injection:** Hilt
 - **Navigation:** Jetpack Navigation Compose
-- **Networking:** Retrofit (if integrating with external APIs beyond Google Fit)
+- **Networking:** Retrofit (for Google Fit API and any other external APIs)
 - **Permissions:** Handling for Location, Activity Recognition, etc.
-- **Google Services:** Google Fit API (if integrated)
+- **Google Services:** Google Fit API
 
-## Project Structure (Conceptual)
+## 📂 Project Structure (Conceptual)
 
 ```
 android-fitness-tracker/
@@ -77,7 +85,7 @@ android-fitness-tracker/
 └── .gitignore
 ```
 
-## Setup and Running
+## ⚙️ Setup and Running
 
 1.  **Clone the repository:**
     ```bash
@@ -85,15 +93,19 @@ android-fitness-tracker/
     cd android-fitness-tracker
     ```
 2.  **Open in Android Studio:** Open the project with the latest stable version of Android Studio.
-3.  **Google Fit API (If Integrated):**
-    *   You will need to set up a project in the Google API Console.
+3.  **Google Fit API Configuration:**
+    *   Set up a project in the [Google API Console](https://console.developers.google.com/).
     *   Enable the Fitness API.
     *   Create OAuth 2.0 client IDs for Android and add the SHA-1 fingerprint of your signing certificate.
-    *   Relevant API keys or client IDs might need to be added to the project (e.g., in a `local.properties` or through build configurations - ensure these are not committed to version control directly).
+    *   Place necessary API keys or client IDs in your `local.properties` file (this file should be in your project's root directory and is not version controlled by `.gitignore`). For example:
+        ```properties
+        GOOGLE_FIT_API_KEY="YOUR_API_KEY"
+        GOOGLE_FIT_CLIENT_ID="YOUR_CLIENT_ID"
+        ```
 4.  **Build the project:** Let Android Studio sync and build the project. Resolve any dependency issues.
 5.  **Run the app:** Select an emulator or a physical device and run the app.
 
-## Permissions
+## 🔒 Permissions
 
 The app will require the following permissions (among others, depending on features):
 - `android.permission.ACCESS_FINE_LOCATION` for GPS tracking.
@@ -101,8 +113,3 @@ The app will require the following permissions (among others, depending on featu
 - `android.permission.INTERNET` for API calls.
 
 Ensure these are declared in the `AndroidManifest.xml` and handled at runtime according to Android best practices.
-
-## Contribution
-
-(Details for contribution can be added here if this were an open-source project.)
-

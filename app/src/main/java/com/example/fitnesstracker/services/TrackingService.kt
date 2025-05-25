@@ -1,1 +1,168 @@
-package com.example.fitnesstracker.services\n\nimport android.app.NotificationChannel\nimport android.app.NotificationManager\nimport android.app.PendingIntent\nimport android.content.Context\nimport android.content.Intent\nimport android.location.Location\nimport android.os.Binder\nimport android.os.Build\nimport android.os.IBinder\nimport android.os.Looper\nimport androidx.core.app.NotificationCompat\nimport androidx.lifecycle.LifecycleService\nimport androidx.lifecycle.MutableLiveData\nimport com.example.fitnesstracker.MainActivity // Assuming MainActivity is the entry point\nimport com.example.fitnesstracker.R\nimport com.google.android.gms.location.*\nimport com.google.android.gms.maps.model.LatLng\nimport kotlinx.coroutines.*\nimport timber.log.Timber\nimport java.util.concurrent.TimeUnit\n\nclass TrackingService : LifecycleService() {\n\n    private val serviceJob = SupervisorJob()\n    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)\n\n    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient\n    private lateinit var notificationManager: NotificationManager\n\n    private val binder = LocalBinder()\n\n    // LiveData for UI updates\n    val trackingStatus = MutableLiveData<TrackingStatus>(TrackingStatus.NOT_STARTED)\n    val currentPathPoints = MutableLiveData<MutableList<LatLng>>(mutableListOf())\n    val currentDurationMillis = MutableLiveData<Long>(0L)\n    val currentDistanceMeters = MutableLiveData<Float>(0f)\n\n    private var startTimeMillis: Long = 0L\n    private var timerJob: Job? = null\n    private var lastLocation: Location? = null\n\n    enum class TrackingStatus {\n        NOT_STARTED, TRACKING, PAUSED\n    }\n\n    companion object {\n        const val ACTION_START_OR_RESUME_SERVICE = \"ACTION_START_OR_RESUME_SERVICE\"\n        const val ACTION_PAUSE_SERVICE = \"ACTION_PAUSE_SERVICE\"\n        const val ACTION_STOP_SERVICE = \"ACTION_STOP_SERVICE\"\n\n        private const val NOTIFICATION_CHANNEL_ID = \"tracking_channel\"\n        private const val NOTIFICATION_CHANNEL_NAME = \"Tracking\"\n        private const val NOTIFICATION_ID = 1\n\n        private const val LOCATION_UPDATE_INTERVAL = 5000L // 5 seconds\n        private const val FASTEST_LOCATION_INTERVAL = 2000L // 2 seconds\n    }\n\n    override fun onCreate() {\n        super.onCreate()\n        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)\n        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\n            createNotificationChannel()\n        }\n    }\n\n    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {\n        super.onStartCommand(intent, flags, startId)\n        intent?.let {\n            when (it.action) {\n                ACTION_START_OR_RESUME_SERVICE -> {\n                    Timber.d(\"Started or Resumed service\")\n                    if (trackingStatus.value == TrackingStatus.NOT_STARTED) {\n                        startForegroundService()\n                        startTracking()\n                    } else if (trackingStatus.value == TrackingStatus.PAUSED) {\n                        resumeTracking()\n                    }\n                }\n                ACTION_PAUSE_SERVICE -> {\n                    Timber.d(\"Paused service\")\n                    pauseTracking()\n                }\n                ACTION_STOP_SERVICE -> {\n                    Timber.d(\"Stopped service\")\n                    stopServiceAndTracking()\n                }\n            }\n        }\n        return START_STICKY // If the service is killed, restart it\n    }\n\n    private fun startTracking() {\n        trackingStatus.postValue(TrackingStatus.TRACKING)\n        startTimeMillis = System.currentTimeMillis()\n        startTimer()\n        startLocationUpdates()\n        // Update notification for tracking state\n        updateNotification(TrackingStatus.TRACKING)\n    }\n\n    private fun resumeTracking() {\n        trackingStatus.postValue(TrackingStatus.TRACKING)\n        startTimeMillis = System.currentTimeMillis() - (currentDurationMillis.value ?: 0L)\n        startTimer()\n        startLocationUpdates()\n        // Update notification for tracking state\n        updateNotification(TrackingStatus.TRACKING)\n    }\n\n    private fun pauseTracking() {\n        trackingStatus.postValue(TrackingStatus.PAUSED)\n        timerJob?.cancel()\n        stopLocationUpdates()\n        // Update notification for paused state\n        updateNotification(TrackingStatus.PAUSED)\n    }\n\n    private fun stopServiceAndTracking() {\n        timerJob?.cancel()\n        stopLocationUpdates()\n        currentPathPoints.postValue(mutableListOf()) // Clear path\n        currentDurationMillis.postValue(0L)\n        currentDistanceMeters.postValue(0f)\n        lastLocation = null\n        trackingStatus.postValue(TrackingStatus.NOT_STARTED)\n        stopForeground(true)\n        stopSelf()\n    }\n\n    private fun startTimer() {\n        timerJob?.cancel()\n        timerJob = serviceScope.launch {\n            val timeStarted = System.currentTimeMillis()\n            var lapTime = 0L\n\n            while (trackingStatus.value == TrackingStatus.TRACKING) {\n                lapTime = System.currentTimeMillis() - timeStarted\n                currentDurationMillis.postValue( (currentDurationMillis.value ?: 0L) + lapTime - (currentDurationMillis.value ?: 0L) ) // More robust update\n                // More accurate way to update total duration from initial start time and current pauses:\n                // currentDurationMillis.postValue(System.currentTimeMillis() - startTimeMillis - totalPauseTimeMillis) \n                // This needs totalPauseTimeMillis to be tracked.\n                // For simplicity now, we use the simpler method which might drift slightly with many pauses.\n                currentDurationMillis.postValue(System.currentTimeMillis() - startTimeMillis) // This tracks total time since very first start or resume\n\n                delay(1000L) // Update every second\n            }\n        }\n    }\n\n    private val locationCallback = object : LocationCallback() {\n        override fun onLocationResult(result: LocationResult) {\n            super.onLocationResult(result)\n            if (trackingStatus.value == TrackingStatus.TRACKING) {\n                result.locations.let {\ locations ->\n                    for (location in locations) {\n                        addPathPoint(location)\n                        Timber.d(\"New location: ${location.latitude}, ${location.longitude}\")\n                    }\n                }\n            }\n        }\n    }\n\n    private fun startLocationUpdates() {\n        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, LOCATION_UPDATE_INTERVAL)\n            .setWaitForAccurateLocation(false)\n            .setMinUpdateIntervalMillis(FASTEST_LOCATION_INTERVAL)\n            .build()\n        try {\n            fusedLocationProviderClient.requestLocationUpdates(\n                locationRequest,\n                locationCallback,\n                Looper.getMainLooper()\n            )\n        } catch (e: SecurityException) {\n            Timber.e(e, \"Lost location permission. Could not request updates.\")\n            // TODO: Handle permission loss, maybe stop service or notify user\n        }\n    }\n\n    private fun stopLocationUpdates() {\n        fusedLocationProviderClient.removeLocationUpdates(locationCallback)\n    }\n\n    private fun addPathPoint(location: Location?) {\n        location?.let {\n            val pos = LatLng(it.latitude, it.longitude)\n            val newPathPoints = currentPathPoints.value ?: mutableListOf()\n            newPathPoints.add(pos)\n            currentPathPoints.postValue(newPathPoints)\n\n            lastLocation?.let {\ oldLoc ->\n                val newDistance = currentDistanceMeters.value ?: 0f\n                currentDistanceMeters.postValue(newDistance + oldLoc.distanceTo(location))\n            }\n            lastLocation = location\n        }\n    }\n\n    private fun startForegroundService() {\n        val notification = createNotification(TrackingStatus.TRACKING) // Initial notification\n        startForeground(NOTIFICATION_ID, notification)\n    }\n\n    private fun createNotificationChannel() {\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\n            val channel = NotificationChannel(\n                NOTIFICATION_CHANNEL_ID,\n                NOTIFICATION_CHANNEL_NAME,\n                NotificationManager.IMPORTANCE_LOW\n            )\n            notificationManager.createNotificationChannel(channel)\n        }\n    }\n\n    private fun updateNotification(status: TrackingStatus) {\n        val notification = createNotification(status)\n        notificationManager.notify(NOTIFICATION_ID, notification)\n    }\n\n    private fun createNotification(status: TrackingStatus): android.app.Notification {\n        val notificationText = when (status) {\n            TrackingStatus.TRACKING -> \"Tracking activity... Distance: ${currentDistanceMeters.value?.formatDistance() ?: \\\"0m\\\"}, Time: ${currentDurationMillis.value?.formatDuration() ?: \\\"0s\\\"}\"\n            TrackingStatus.PAUSED -> \"Activity paused. Distance: ${currentDistanceMeters.value?.formatDistance() ?: \\\"0m\\\"}, Time: ${currentDurationMillis.value?.formatDuration() ?: \\\"0s\\\"}\"\n            TrackingStatus.NOT_STARTED -> \"Fitness Tracker\"\n        }\n\n        val activityPendingIntent = PendingIntent.getActivity(\n            this,\n            0,\n            Intent(this, MainActivity::class.java).apply { // TODO: Should navigate to tracking screen if possible\n                action = \"SHOW_TRACKING_FRAGMENT\" // Custom action for MainActivity to handle\n            },\n            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE\n        )\n\n        val builder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)\n            .setAutoCancel(false)\n            .setOngoing(true)\n            .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with actual tracking icon\n            .setContentTitle(\"Fitness Activity\")\n            .setContentText(notificationText)\n            .setContentIntent(activityPendingIntent)\n\n        // Add actions based on status\n        when (status) {\n            TrackingStatus.TRACKING -> {\n                val pauseIntent = Intent(this, TrackingService::class.java).apply { action = ACTION_PAUSE_SERVICE }\n                val pausePendingIntent = PendingIntent.getService(this, 1, pauseIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)\n                builder.addAction(R.drawable.ic_pause, \"Pause\", pausePendingIntent) // TODO: Replace with actual pause icon\n            }\n            TrackingStatus.PAUSED -> {\n                val resumeIntent = Intent(this, TrackingService::class.java).apply { action = ACTION_START_OR_RESUME_SERVICE }\n                val resumePendingIntent = PendingIntent.getService(this, 2, resumeIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)\n                builder.addAction(R.drawable.ic_play_arrow, \"Resume\", resumePendingIntent) // TODO: Replace with actual play icon\n            }\n            else -> Unit // No actions for NOT_STARTED in this ongoing notification context\n        }\n\n        val stopIntent = Intent(this, TrackingService::class.java).apply { action = ACTION_STOP_SERVICE }\n        val stopPendingIntent = PendingIntent.getService(this, 3, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)\n        builder.addAction(R.drawable.ic_stop, \"Stop\", stopPendingIntent) // TODO: Replace with actual stop icon\n\n        return builder.build()\n    }\n\n\n    override fun onBind(intent: Intent): IBinder {\n        super.onBind(intent)\n        return binder\n    }\n\n    inner class LocalBinder : Binder() {\n        fun getService(): TrackingService = this@TrackingService\n    }\n\n    override fun onDestroy() {\n        super.onDestroy()\n        serviceJob.cancel()\n    }\n}\n
+package com.example.fitnesstracker.services
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.IBinder
+import android.os.Looper
+import androidx.core.app.NotificationCompat
+import com.example.fitnesstracker.MainActivity // To open app on notification click
+import com.example.fitnesstracker.R
+import com.google.android.gms.location.*
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class TrackingService : Service() {
+
+    @Inject
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var notificationBuilder: NotificationCompat.Builder
+
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    private var isServiceRunning = false
+    private var currentActivityType: String? = null
+    // Store tracking data like pathPoints, duration, distance etc.
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(result: LocationResult) {
+            super.onLocationResult(result)
+            result.locations.let {
+                locations ->
+                for (location in locations) {
+                    // TODO: Add location to pathPoints
+                    // TODO: Update notification with current stats (distance, time)
+                    Timber.d("New location: ${location.latitude}, ${location.longitude}")
+                }
+            }
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        intent?.let {
+            when (it.action) {
+                ACTION_START_OR_RESUME_SERVICE -> {
+                    currentActivityType = it.getStringExtra(EXTRA_ACTIVITY_TYPE)
+                    if (!isServiceRunning) {
+                        startForegroundService()
+                        Timber.d("Tracking service started")
+                    } else {
+                        Timber.d("Tracking service resumed")
+                        // Update notification or state if needed
+                    }
+                }
+                ACTION_PAUSE_SERVICE -> {
+                    Timber.d("Tracking service paused")
+                    pauseLocationTracking()
+                }
+                ACTION_STOP_SERVICE -> {
+                    Timber.d("Tracking service stopped")
+                    stopServiceAndCleanup()
+                }
+            }
+        }
+        return START_STICKY // Keep service running if killed by system
+    }
+
+    private fun startForegroundService() {
+        isServiceRunning = true
+        // TODO: Start location tracking
+        // TODO: Initialize activity data (startTime, etc.)
+        startLocationUpdates()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
+        startForeground(NOTIFICATION_ID, notificationBuilder.build())
+        // Update notification regularly with tracking data
+    }
+    
+    private fun pauseLocationTracking() {
+        isServiceRunning = false // Or a new state like IS_PAUSED
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+    
+    private fun stopServiceAndCleanup() {
+        isServiceRunning = false
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        // TODO: Save the tracked activity to database via Repository
+        stopForeground(true)
+        stopSelf()
+        serviceScope.cancel() // Cancel coroutines
+    }
+
+    @Suppress("MissingPermission") // Permissions should be checked before starting service
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest.create().apply {
+            interval = LOCATION_UPDATE_INTERVAL
+            fastestInterval = FASTEST_LOCATION_UPDATE_INTERVAL
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
+        fusedLocationProviderClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper() // Or a background looper
+        )
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                NOTIFICATION_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_LOW
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    // This method would be called to update the notification with current stats
+    // private fun updateNotification(distance: Float, timeInMillis: Long) { ... }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        // Not used for started services that don't need binding
+        return null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel() // Ensure coroutines are cancelled
+        // Potentially remove location updates if not already done
+        // fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    companion object {
+        const val ACTION_START_OR_RESUME_SERVICE = "ACTION_START_OR_RESUME_SERVICE"
+        const val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
+        const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
+        const val EXTRA_ACTIVITY_TYPE = "EXTRA_ACTIVITY_TYPE"
+
+        const val NOTIFICATION_CHANNEL_ID = "tracking_channel"
+        const val NOTIFICATION_CHANNEL_NAME = "Tracking"
+        const val NOTIFICATION_ID = 101 // Unique ID for the notification
+        
+        const val LOCATION_UPDATE_INTERVAL = 5000L // 5 seconds
+        const val FASTEST_LOCATION_UPDATE_INTERVAL = 2000L // 2 seconds
+    }
+}

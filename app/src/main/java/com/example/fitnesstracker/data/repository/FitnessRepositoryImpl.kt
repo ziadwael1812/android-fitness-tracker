@@ -23,6 +23,7 @@ class FitnessRepositoryImpl @Inject constructor(
     override suspend fun deleteActivityRecord(record: ActivityRecord) = activityRecordDao.deleteActivityRecord(record)
     override fun getActivityRecordById(id: Long): Flow<ActivityRecord?> = activityRecordDao.getActivityRecordById(id)
     override fun getAllActivityRecords(): Flow<List<ActivityRecord>> = activityRecordDao.getAllActivityRecords()
+    override fun getAllActivityRecordsSortedByDate(): Flow<List<ActivityRecord>> = activityRecordDao.getAllActivityRecordsSortedByDate() // New method implementation
     override fun getActivityRecordsBetweenDates(startDate: Date, endDate: Date): Flow<List<ActivityRecord>> = activityRecordDao.getActivityRecordsBetweenDates(startDate, endDate)
     override fun getActivityRecordsByType(activityType: String): Flow<List<ActivityRecord>> = activityRecordDao.getActivityRecordsByType(activityType)
     override suspend fun deleteAllActivityRecords() = activityRecordDao.deleteAllActivityRecords()
